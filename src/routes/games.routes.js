@@ -15,10 +15,11 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", verificarToken, async (req, res) => {
+  try {
   const { titulo, descripcion, precio, imagen } = req.body
 
   const query = `
-    INSERT INTO juegos (titulo, descripcion, precio, imagen, user_id)
+    INSERT INTO juegos (titulo, descripcion, precio, imagen,)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *
   `
@@ -27,11 +28,15 @@ router.post("/", verificarToken, async (req, res) => {
     titulo,
     descripcion,
     precio,
-    imagen,
-    req.user.id
+    imagen
   ])
 
   res.status(201).json(result.rows[0])
+    
+  } catch (error) {
+    console.error("Error al insertar juego:", error)
+    res.status(500).json({ error: error.message })
+  }
 })
 
 export default router
