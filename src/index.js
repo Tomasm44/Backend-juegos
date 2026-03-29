@@ -4,6 +4,33 @@ import { pool } from "./db/config.js"
 import authRoutes from "./routes/auth.routes.js"
 import gamesRoutes from "./routes/games.routes.js"
 
+// Función para crear las tablas automáticamente
+const initDB = async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(100),
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS juegos (
+        id SERIAL PRIMARY KEY,
+        titulo VARCHAR(100) NOT NULL,
+        precio DECIMAL(10, 2) NOT NULL,
+        imagen TEXT,
+        descripcion TEXT
+      );
+    `);
+    console.log("✅ Tablas verificadas/creadas");
+  } catch (error) {
+    console.error("❌ Error al inicializar DB:", error);
+  }
+};
+
+initDB(); // Ejecutar al arrancar el servidor
+
 const app = express()
 
 app.use(cors({
