@@ -19,7 +19,7 @@ router.post("/", verificarToken, async (req, res) => {
   const { titulo, descripcion, precio, imagen } = req.body
 
   const query = `
-    INSERT INTO juegos (titulo, descripcion, precio, imagen,)
+    INSERT INTO juegos (titulo, descripcion, precio, imagen)
     VALUES ($1, $2, $3, $4)
     RETURNING *
   `
